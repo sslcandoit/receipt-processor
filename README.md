@@ -14,7 +14,7 @@ To run this application, ensure you have the following installed:
 
 1. **Clone the Repository**:
    ```bash
-   git clone <[repository-url](https://github.com/sslcandoit/receipt-processor.git)>
+   git clone https://github.com/sslcandoit/receipt-processor.git
    cd receipt-processor
    ```
 2. **Install Dependencies**:
