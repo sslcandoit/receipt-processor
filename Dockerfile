@@ -1,10 +1,10 @@
-# Use the official Golang image as the builder
+# Stage 1: Build the Go application
 FROM golang:1.17 AS builder
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
 
-# Copy go mod and go sum files
+# Copy go.mod and go.sum files
 COPY go.mod go.sum ./
 
 # Download dependencies
@@ -13,20 +13,17 @@ RUN go mod download
 # Copy the source code into the container
 COPY . .
 
-# Build the application
-RUN go build -o receipt-processor
+# Build the Go app as a static binary
+RUN CGO_ENABLED=0 GOOS=linux go build -o receipt-processor .
 
-# Use a smaller base image for the final container
+# Stage 2: Create a small image using only the binary
 FROM alpine:latest
-
-# Set the working directory in the final container
 WORKDIR /root/
-
-# Copy the built binary from the builder stage
 COPY --from=builder /app/receipt-processor .
 
 # Expose port 8080
 EXPOSE 8080
 
-# Command to run the executable
+# Run the executable
 CMD ["./receipt-processor"]
+
